@@ -5,15 +5,17 @@ from scoreboard import Scoreboard
 
 import time
 
+
 screen = Screen()
 screen.setup(width=600, height=600)
 screen.bgcolor("black")
 screen.title("Snake Game")
 screen.tracer(0)
+user_name = screen.textinput(title="Welcome!", prompt="What is your name?")
 
 snake = Snake()
 food = Food()
-scoreboard = Scoreboard()
+scoreboard = Scoreboard(user_name)
 
 screen.listen()
 screen.onkey(snake.up, "Up")
@@ -34,15 +36,17 @@ while game_is_on:
         scoreboard.score()
 
     # Detect collision with wall.
-    if snake.head.xcor() > 290 or snake.head.xcor() < -290 or snake.head.ycor() > 290 or snake.head.ycor() < -280:
-        game_is_on = False
-        scoreboard.game_over()
+    if snake.head.xcor() > 290 or snake.head.xcor() < -290 or snake.head.ycor() > 280 or snake.head.ycor() < -280:
+        scoreboard.reset_s()
+        snake.reset_snake()
 
     # Detect collision with tail.
     for segment in snake.segments[1:]:
         if snake.head.distance(segment) < 10:
-            game_is_on = False
-            scoreboard.game_over()
+            scoreboard.reset_s()
+            snake.reset_snake()
+
 
 
 screen.exitonclick()
+
